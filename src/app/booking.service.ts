@@ -1,39 +1,39 @@
 import { Injectable } from '@angular/core';
 import {Booking} from './booking';
 import {Bookings} from './mock-bookings';
-
+import {HttpClient, HttpHeaders} from '@angular/common/http';
+import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class BookingService {
 
-  constructor() { }
+  constructor(private httpClient:HttpClient) { }
+  bookingsUrl:string="/api/bookings";
 
-  getBookings(): Booking[]
+  getBookings(): Observable<Booking[]>
   {
-    return Bookings;
+
+    let result=this.httpClient.get<Booking[]>(this.bookingsUrl)
+    return result;
   }
 
-  deleteBooking(booking:Booking):void
+  deleteBooking(booking:Booking):Observable<Booking>
   {
-    let index=Bookings.indexOf(booking);
-    Bookings.splice(index, 1);
+    let result=this.httpClient.delete<Booking>(this.bookingsUrl+"/"+booking.id);
+    return result;
   }
 
-  getBookingById(id:number):Booking
+  getBookingById(id:number):Observable<Booking>
   {
-    let result=Bookings.find(booking=> booking.id===id)!;
+    let result=this.httpClient.get<Booking>(this.bookingsUrl+"/"+id)
     return(result);
   }
 
-  addBooking(booking: Booking):void
+  addBooking(booking: Booking):Observable<Booking>
   {
-    Bookings.push(booking);
+    let response=this.httpClient.post<Booking>(this.bookingsUrl,booking);
+    return response;
   }
 
-  updateBooking(booking: Booking):void
-  {
-    let currentBooking=this.getBookingById(booking.id);
-    currentBooking=booking;
-  }
 }

@@ -19,7 +19,7 @@ export class InMemoryDataService implements InMemoryDbService{
       {id:4, name:"Stefani Reller", roomNumber:103, startDate: new Date("2021-08-14"), endDate:new Date("2021-09-03")}
     ];
 
-    return(bookings);
+    return{bookings};
   }
 
   
